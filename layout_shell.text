@@ -15,7 +15,7 @@
   <body>
     <div class="wrapper">
       <header>
-        <h1>Mathematical</h1>
+        <h1><a href="./index.html">Mathematical</a></h1>
         <p>Convert mathematical equations to base64 encoded SVGs.</p>
 
         <p class="view"><a href="https://github.com/gjtorikian/mathematical">View the Project on GitHub <small>gjtorikian/mathematical</small></a></p>
