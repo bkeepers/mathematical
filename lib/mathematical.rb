@@ -1,7 +1,7 @@
-require "./lib/mathematical/parser"
-require "./lib/mathematical/render"
-require "./lib/mathematical/version"
-require "./lib/mathematical.bundle"
+require "mathematical/parser"
+require "mathematical/render"
+require "mathematical/version"
+require File.expand_path("../mathematical.bundle", __FILE__)
 
 module Mathematical
   # Raised when missing binaries for images rendering.

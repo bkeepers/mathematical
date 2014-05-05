@@ -1,8 +1,8 @@
 require 'mkmf'
-LIBDIR      = RbConfig::CONFIG['libdir']
-INCLUDEDIR  = RbConfig::CONFIG['includedir']
 
 extension_name = 'mathematical'
+
+# dir_config(extension_name)
 
 pkg_config("glib-2.0")
 pkg_config("gdk-pixbuf-2.0")
@@ -16,58 +16,15 @@ find_header("libxml/xpathInternals.h", "/usr/include/libxml2", "/usr/local/inclu
 have_library("cairo")
 find_header("cairo.h", "/opt/X11/include/cairo")
 
-begin
-  brew_output = %x[brew list pango]
-  puts brew_output, "POOP"
-  match = brew_output.match(/(\S+?\/include\/\S+?)\/pango\/pango-\w+\.h/)
-  raise ArgumentError if match.nil?
-  brew_pango_includes = match[1]
-rescue Errno::ENOENT, ArgumentError
-  brew_pango_includes = ""
-end
-
 have_library("pangocairo")
 HEADER_DIRS = [
-  # Depend on Homebrew version first
-  brew_pango_includes,
-
-  # Then search /opt/local for macports
-  '/opt/local/include',
-
-  # Then search /usr/local for people that installed from source
-  '/usr/local/include',
-
-  # Check the ruby install locations
-  INCLUDEDIR,
-
-  # Finally fall back to /usr
-  '/usr/include',
+  # First search /opt/local for macports
+  '/opt/boxen/homebrew/Cellar/pango/1.36.3/include/pango-1.0/',
 ]
 
-begin
-  brew_output = %x[brew list pango]
-  match = brew_output.match(/(\S+?\/lib\/)/)
-  raise ArgumentError if match.nil?
-  brew_pango_lib = match
-rescue Errno::ENOENT, ArgumentError
-  brew_pango_lib = ""
-end
-
 LIB_DIRS = [
-  # Depend on Homebrew version first
-  brew_pango_lib,
-
-  # Then search /opt/local for macports
-  '/opt/local/lib',
-
-  # Then search /usr/local for people that installed from source
-  '/usr/local/lib',
-
-  # Check the ruby install locations
-  LIBDIR,
-
-  # Finally fall back to /usr
-  '/usr/lib',
+  # First search /opt/local for macports
+  '/opt/boxen/homebrew/opt/pango/lib/'
 ]
 
 dir_config('pango', HEADER_DIRS, LIB_DIRS)
@@ -80,11 +37,15 @@ end
 
 dir_config('pangocairo', HEADER_DIRS, LIB_DIRS)
 unless find_library('pangocairo-1.0', 'pango_cairo_font_map_get_default')
-  abort "libpangocairo is missing.  please install libpangocairo"
+  abort "libpango is missing.  please install libpango"
 end
 
-find_header("pango/pangocairo.h" , "/opt/boxen/homebrew/Cellar/pango/1.36.3/include/pango-1.0/")
-find_header("pango/pango-font.h" , "/opt/boxen/homebrew/Cellar/pango/1.36.3/include/pango-1.0/")
-find_header("pango/pango-fontmap.h" , "/opt/boxen/homebrew/Cellar/pango/1.36.3/include/pango-1.0/")
+find_header("pango/pangocairo.h" , "/opt/boxen/homebrew/Cellar/pango/1.36.0/include/pango-1.0/")
+find_header("pango/pango-font.h" , "/opt/boxen/homebrew/Cellar/pango/1.36.0/include/pango-1.0/")
+find_header("pango/pango-fontmap.h" , "/opt/boxen/homebrew/Cellar/pango/1.36.0/include/pango-1.0/")
 
+# pangocairo-fontmap.c
 create_makefile(extension_name)
+
+# /opt/boxen/homebrew/opt/pango/lib/
+# otool -L lib/mathematical.bundle
